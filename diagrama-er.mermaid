@@ -1,0 +1,70 @@
+erDiagram
+
+    %% ── Supabase Auth (tabla gestionada por Supabase, solo lectura) ──
+    AUTH_USERS {
+        uuid    id              PK
+        string  email
+        string  phone
+        datetime email_confirmed_at
+        datetime last_sign_in_at
+        datetime created_at
+        datetime updated_at
+    }
+
+    %% ── Tablas propias del proyecto ──
+    PERFIL {
+        uuid    id              PK  "FK → auth.users.id"
+        string  nombre
+        string  avatar_url
+        string  moneda          "USD | MXN | EUR…"
+        datetime created_at
+        datetime updated_at
+    }
+
+    CATEGORIA {
+        int     id              PK
+        string  nombre
+        string  icono
+        string  color
+    }
+
+    PROVEEDOR {
+        int     id              PK
+        int     id_categoria    FK
+        string  nombre
+        string  icono
+        string  color
+        string  url
+        datetime created_at
+    }
+
+    SUSCRIPCION {
+        uuid    id              PK
+        uuid    id_usuario      FK  "FK → auth.users.id"
+        int     id_proveedor    FK
+        decimal precio
+        string  tipo            "mensual | anual"
+        int     dia_cobro
+        date    fecha_inicio
+        date    fecha_fin
+        boolean activo
+        datetime created_at
+    }
+
+    GASTO_MENSUAL {
+        uuid    id              PK
+        uuid    id_suscripcion  FK
+        int     mes
+        int     anio
+        decimal monto
+        date    fecha_cobro
+        boolean pagado
+        string  notas
+        datetime created_at
+    }
+
+    AUTH_USERS     ||--|| PERFIL         : "extiende"
+    AUTH_USERS     ||--o{ SUSCRIPCION    : "contrata"
+    CATEGORIA      ||--o{ PROVEEDOR      : "clasifica"
+    PROVEEDOR      ||--o{ SUSCRIPCION    : "ofrecido en"
+    SUSCRIPCION    ||--o{ GASTO_MENSUAL  : "genera"
