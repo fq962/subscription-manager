@@ -9,15 +9,27 @@ import DayDetailModal from "./DayDetailModal";
 import { MOCK_SUBSCRIPTIONS } from "./types";
 
 const MONTHS_ES = [
-  "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-  "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
 ];
 
 const DAYS_ES = ["DOM", "LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB"];
 
 export default function Calendar() {
   const today = new Date();
-  const [currentDate, setCurrentDate] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
+  const [currentDate, setCurrentDate] = useState(
+    new Date(today.getFullYear(), today.getMonth(), 1),
+  );
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const month = currentDate.getMonth();
   const year = currentDate.getFullYear();
@@ -40,7 +52,7 @@ export default function Calendar() {
   // Total for the month
   const total = useMemo(
     () => MOCK_SUBSCRIPTIONS.reduce((acc, s) => acc + s.amount, 0),
-    []
+    [],
   );
 
   const getSubsForDay = (day: number | null) => {
@@ -54,11 +66,9 @@ export default function Calendar() {
     month === today.getMonth() &&
     year === today.getFullYear();
 
-  const handlePrev = () =>
-    setCurrentDate(new Date(year, month - 1, 1));
+  const handlePrev = () => setCurrentDate(new Date(year, month - 1, 1));
 
-  const handleNext = () =>
-    setCurrentDate(new Date(year, month + 1, 1));
+  const handleNext = () => setCurrentDate(new Date(year, month + 1, 1));
 
   return (
     <div

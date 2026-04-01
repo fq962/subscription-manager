@@ -32,7 +32,11 @@ export default function DayDetailModal({
     /* Backdrop */
     <div
       className="fixed inset-0 z-50 flex items-center justify-center"
-      style={{ backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)", backgroundColor: "rgba(0,0,0,0.35)" }}
+      style={{
+        backdropFilter: "blur(6px)",
+        WebkitBackdropFilter: "blur(6px)",
+        backgroundColor: "rgba(0,0,0,0.35)",
+      }}
       onClick={onClose}
     >
       {/* Card */}
@@ -42,7 +46,10 @@ export default function DayDetailModal({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Day label */}
-        <p className="text-xs uppercase tracking-widest mb-4" style={{ color: "rgba(255,255,255,0.35)" }}>
+        <p
+          className="text-xs uppercase tracking-widest mb-4"
+          style={{ color: "rgba(255,255,255,0.35)" }}
+        >
           {month} {day}
         </p>
 
@@ -65,8 +72,13 @@ export default function DayDetailModal({
                 </div>
                 {/* Name + type */}
                 <div>
-                  <p className="text-white text-sm font-medium leading-tight">{sub.name}</p>
-                  <p className="text-xs capitalize" style={{ color: "rgba(255,255,255,0.35)" }}>
+                  <p className="text-white text-sm font-medium leading-tight">
+                    {sub.name}
+                  </p>
+                  <p
+                    className="text-xs capitalize"
+                    style={{ color: "rgba(255,255,255,0.35)" }}
+                  >
                     {sub.type}
                   </p>
                 </div>
@@ -80,11 +92,16 @@ export default function DayDetailModal({
         </div>
 
         {/* Divider */}
-        <div className="my-4" style={{ height: 1, backgroundColor: "rgba(255,255,255,0.08)" }} />
+        <div
+          className="my-4"
+          style={{ height: 1, backgroundColor: "rgba(255,255,255,0.08)" }}
+        />
 
         {/* Total */}
         <div className="flex items-center justify-between">
-          <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>Total</p>
+          <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>
+            Total
+          </p>
           <p className="text-white font-bold text-base">${total.toFixed(2)}</p>
         </div>
       </div>

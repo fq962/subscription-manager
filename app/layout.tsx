@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import AuthButton from "@/components/auth/AuthButton";
 
 import type { Metadata } from "next";
 import "./globals.css";
@@ -25,9 +26,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <header className="fixed top-0 right-0 z-50 p-4">
+          <AuthButton />
+        </header>
         {children}
       </body>
     </html>
