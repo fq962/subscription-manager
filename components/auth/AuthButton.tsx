@@ -2,10 +2,12 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import ExchangeRateModal, { GearIcon } from "./ExchangeRateModal";
 
 export default function AuthButton() {
   const { user, loading, signInWithGoogle, signOut } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [rateModalOpen, setRateModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Close menu when clicking outside
@@ -48,7 +50,24 @@ export default function AuthButton() {
   const avatar = user.user_metadata?.avatar_url;
 
   return (
-    <div className="relative" ref={menuRef}>
+    <>
+    {rateModalOpen && <ExchangeRateModal onClose={() => setRateModalOpen(false)} />}
+    <div className="relative flex items-center gap-1" ref={menuRef}>
+      {/* Gear icon button */}
+      <button
+        onClick={() => setRateModalOpen(true)}
+        title="Tasa de cambio $ → L"
+        className="flex items-center justify-center rounded-full transition-all"
+        style={{
+          width: 28,
+          height: 28,
+          backgroundColor: "rgba(255,255,255,0.0)",
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.08)")}
+        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.0)")}
+      >
+        <GearIcon size={14} color="rgba(255,255,255,0.4)" />
+      </button>
       <button
         onClick={() => setMenuOpen((o) => !o)}
         className="flex items-center gap-2 cursor-pointer"
@@ -97,6 +116,7 @@ export default function AuthButton() {
         </div>
       )}
     </div>
+    </>
   );
 }
 

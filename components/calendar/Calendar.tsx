@@ -6,21 +6,14 @@ import CalendarTotal from "./CalendarTotal";
 import CalendarFilter from "./CalendarFilter";
 import CalendarDayCell from "./CalendarDayCell";
 import DayDetailModal from "./DayDetailModal";
-import { MOCK_SUBSCRIPTIONS } from "./types";
+import AddSubscriptionButton from "./AddSubscriptionButton";
+import { useSubscriptions } from "@/hooks/useSubscriptions";
+import type { Subscription } from "./types";
+import { TYPE_COLOR } from "./types";
 
 const MONTHS_ES = [
-  "Enero",
-  "Febrero",
-  "Marzo",
-  "Abril",
-  "Mayo",
-  "Junio",
-  "Julio",
-  "Agosto",
-  "Septiembre",
-  "Octubre",
-  "Noviembre",
-  "Diciembre",
+  "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+  "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
 ];
 
 const DAYS_ES = ["DOM", "LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB"];
@@ -31,33 +24,56 @@ export default function Calendar() {
     new Date(today.getFullYear(), today.getMonth(), 1),
   );
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
+
   const month = currentDate.getMonth();
   const year = currentDate.getFullYear();
 
+  const { subscriptions: rawSubscriptions, loading, refetch, deleteSubscription } = useSubscriptions();
+
+  // Map DB rows to the Subscription shape used by calendar components
+  const subscriptions: Subscription[] = useMemo(() =>
+    rawSubscriptions.map((s) => {
+      const type = (s.type === "anual" ? "anual" : "mensual") as "mensual" | "anual";
+      return {
+        id: s.id,
+        name: s.providers?.name ?? "Sin nombre",
+        icon: s.providers?.icon ?? null,
+        color: TYPE_COLOR[type],
+        amount: s.price,
+        currencySymbol: s.currency_types?.symbol ?? "$",
+        type,
+        billingDay: s.billing_day,
+      };
+    }),
+    [rawSubscriptions],
+  );
+
   // Build the grid of days (with leading nulls for offset)
   const calendarDays = useMemo(() => {
-    const firstDayOfMonth = new Date(year, month, 1).getDay(); // 0=Sun
+    const firstDayOfMonth = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-
     const cells: (number | null)[] = [
       ...Array(firstDayOfMonth).fill(null),
       ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
     ];
-
-    // Always pad to 6 rows (42 cells) so the grid never changes size
     while (cells.length < 42) cells.push(null);
     return cells;
   }, [month, year]);
 
-  // Total for the month
-  const total = useMemo(
-    () => MOCK_SUBSCRIPTIONS.reduce((acc, s) => acc + s.amount, 0),
-    [],
+  // Total grouped by currency symbol
+  const totals = useMemo(
+    () =>
+      subscriptions.reduce<Record<string, number>>((acc, s) => {
+        const sym = s.currencySymbol ?? "$";
+        acc[sym] = (acc[sym] ?? 0) + s.amount;
+        return acc;
+      }, {}),
+    [subscriptions],
   );
 
   const getSubsForDay = (day: number | null) => {
     if (!day) return [];
-    return MOCK_SUBSCRIPTIONS.filter((s) => s.billingDay === day);
+    return subscriptions.filter((s) => s.billingDay === day);
   };
 
   const isToday = (day: number | null) =>
@@ -67,7 +83,6 @@ export default function Calendar() {
     year === today.getFullYear();
 
   const handlePrev = () => setCurrentDate(new Date(year, month - 1, 1));
-
   const handleNext = () => setCurrentDate(new Date(year, month + 1, 1));
 
   return (
@@ -86,7 +101,7 @@ export default function Calendar() {
           />
           <CalendarFilter />
         </div>
-        <CalendarTotal amount={total} />
+        <CalendarTotal totals={totals} />
       </div>
 
       {/* Day headers */}
@@ -102,18 +117,31 @@ export default function Calendar() {
         ))}
       </div>
 
-      {/* Calendar grid */}
-      <div className="grid grid-cols-7 gap-1 sm:gap-2">
-        {calendarDays.map((day, i) => (
-          <CalendarDayCell
-            key={i}
-            day={day}
-            subscriptions={getSubsForDay(day)}
-            isToday={isToday(day)}
-            onClick={day ? () => setSelectedDay(day) : undefined}
-          />
-        ))}
-      </div>
+      {/* Loading state */}
+      {loading ? (
+        <div
+          className="flex items-center justify-center py-16 text-xs uppercase tracking-widest"
+          style={{ color: "rgba(255,255,255,0.25)" }}
+        >
+          Cargando suscripciones...
+        </div>
+      ) : (
+        /* Calendar grid */
+        <div className="grid grid-cols-7 gap-1 sm:gap-2">
+          {calendarDays.map((day, i) => (
+            <CalendarDayCell
+              key={i}
+              day={day}
+              subscriptions={getSubsForDay(day)}
+              isToday={isToday(day)}
+              onClick={day ? () => setSelectedDay(day) : undefined}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Add Subscription Button */}
+      <AddSubscriptionButton onSuccess={refetch} />
 
       {/* Footer */}
       <div
@@ -130,6 +158,9 @@ export default function Calendar() {
           month={MONTHS_ES[month]}
           subscriptions={getSubsForDay(selectedDay)}
           onClose={() => setSelectedDay(null)}
+          onDelete={async (id) => {
+            await deleteSubscription(id);
+          }}
         />
       )}
     </div>

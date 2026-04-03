@@ -1,6 +1,6 @@
 const FILTERS: { label: string; color: string }[] = [
-  { label: "Mensual", color: "#e8a87c" },
-  { label: "Anual", color: "#f5a623" },
+  { label: "Mensual", color: "#60a5fa" },
+  { label: "Anual", color: "#fb923c" },
 ];
 
 export default function CalendarFilter() {

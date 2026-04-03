@@ -1,14 +1,20 @@
 export type SubscriptionType = "mensual" | "anual";
 
 export interface Subscription {
-  id: string;
+  id: number;
   name: string;
-  icon: "music" | "cart" | "settings" | "cloud" | "play";
-  color: string;
+  icon: string | null;      // raw SVG string from providers table
+  color: string;             // derived from type: mensual=#e8a87c, anual=#f5a623
   amount: number;
+  currencySymbol: string;
   type: SubscriptionType;
-  billingDay: number; // day of the month it charges
+  billingDay: number;
 }
+
+export const TYPE_COLOR: Record<SubscriptionType, string> = {
+  mensual: "#60a5fa",  // azul claro — alto contraste sobre fondo oscuro
+  anual: "#fb923c",    // naranja vivo — distinto del azul y del fondo
+};
 
 export interface CalendarDay {
   date: number | null;
