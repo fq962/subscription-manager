@@ -26,6 +26,7 @@ export interface Database {
           moneda?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       categoria: {
         Row: {
@@ -44,6 +45,7 @@ export interface Database {
           icono?: string | null;
           color?: string | null;
         };
+        Relationships: [];
       };
       subscriptions: {
         Row: {
@@ -75,6 +77,20 @@ export interface Database {
           billing_day?: number;
           is_active?: boolean | null;
         };
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_provider_id_fkey";
+            columns: ["provider_id"];
+            referencedRelation: "providers";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "subscriptions_currency_type_id_fkey";
+            columns: ["currency_type_id"];
+            referencedRelation: "currency_types";
+            referencedColumns: ["id"];
+          }
+        ];
       };
       currency_types: {
         Row: {
@@ -90,6 +106,7 @@ export interface Database {
           currency?: string;
           symbol?: string;
         };
+        Relationships: [];
       };
       providers: {
         Row: {
@@ -108,6 +125,7 @@ export interface Database {
           icon?: string | null;
           url?: string | null;
         };
+        Relationships: [];
       };
       proveedor: {
         Row: {
@@ -134,6 +152,7 @@ export interface Database {
           color?: string | null;
           url?: string | null;
         };
+        Relationships: [];
       };
       suscripcion: {
         Row: {
@@ -168,6 +187,7 @@ export interface Database {
           fecha_fin?: string | null;
           activo?: boolean;
         };
+        Relationships: [];
       };
       gasto_mensual: {
         Row: {
@@ -198,7 +218,12 @@ export interface Database {
           pagado?: boolean;
           notas?: string | null;
         };
+        Relationships: [];
       };
     };
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
+    Enums: Record<string, never>;
+    CompositeTypes: Record<string, never>;
   };
 }
