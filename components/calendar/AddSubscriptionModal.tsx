@@ -46,6 +46,7 @@ export default function AddSubscriptionModal({ onClose, onSuccess }: AddSubscrip
   const { providers, currencies, loading } = useProviders();
 
   const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null);
+  const [otherName, setOtherName] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [selectedCurrency, setSelectedCurrency] = useState<Currency | null>(null);
@@ -96,6 +97,7 @@ export default function AddSubscriptionModal({ onClose, onSuccess }: AddSubscrip
     setFormError(null);
 
     if (!selectedProvider) return setFormError("Seleccioná un proveedor.");
+    if (selectedProvider.name === "Other" && !otherName.trim()) return setFormError("Ingresá el nombre del servicio.");
     if (!selectedCurrency) return setFormError("Seleccioná una moneda.");
     if (!monto || parseFloat(monto) <= 0) return setFormError("Ingresá un monto válido.");
     if (!fecha) return setFormError("Ingresá una fecha de pago.");
@@ -114,6 +116,7 @@ export default function AddSubscriptionModal({ onClose, onSuccess }: AddSubscrip
       price: parseFloat(monto),
       type: frecuencia,
       billing_day: billingDay,
+      other_provider_name: selectedProvider.name === "Other" ? otherName.trim() : null,
     });
 
     setSubmitting(false);
@@ -295,6 +298,30 @@ export default function AddSubscriptionModal({ onClose, onSuccess }: AddSubscrip
               </div>
             )}
           </div>
+
+          {/* Nombre personalizado — solo visible si seleccionó "Other" */}
+          {selectedProvider?.name === "Other" && (
+            <div className="flex flex-col gap-1">
+              <label
+                className="text-[0.65rem] uppercase tracking-widest"
+                style={{ color: "rgba(255,255,255,0.35)" }}
+              >
+                Nombre del servicio
+              </label>
+              <input
+                type="text"
+                placeholder="Ej: Disney+, HBO..."
+                value={otherName}
+                onChange={(e) => setOtherName(e.target.value)}
+                autoFocus
+                className="rounded-xl px-3 py-2.5 sm:py-2 text-sm text-white outline-none placeholder:opacity-30"
+                style={{
+                  backgroundColor: "rgba(255,255,255,0.07)",
+                  border: "1px solid rgba(245,166,35,0.4)",
+                }}
+              />
+            </div>
+          )}
 
           {/* Moneda + Monto */}
           <div className="flex gap-3">

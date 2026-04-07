@@ -9,6 +9,7 @@ export interface Subscription {
   currencySymbol: string;
   type: SubscriptionType;
   billingDay: number;
+  otherProviderName?: string | null;
 }
 
 export const TYPE_COLOR: Record<SubscriptionType, string> = {

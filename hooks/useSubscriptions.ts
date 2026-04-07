@@ -9,6 +9,7 @@ export interface SubscriptionRow {
   type: string;
   billing_day: number;
   is_active: boolean | null;
+  other_provider_name: string | null;
   providers: {
     id: number;
     name: string;
@@ -43,6 +44,7 @@ export function useSubscriptions() {
         type,
         billing_day,
         is_active,
+        other_provider_name,
         providers ( id, name, icon ),
         currency_types ( id, currency, symbol )
       `)

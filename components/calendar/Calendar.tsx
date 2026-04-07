@@ -50,7 +50,9 @@ export default function Calendar() {
       const type = (s.type === "anual" ? "anual" : "mensual") as "mensual" | "anual";
       return {
         id: s.id,
-        name: s.providers?.name ?? "Sin nombre",
+        name: (s.providers?.name === "Other" && s.other_provider_name)
+          ? s.other_provider_name
+          : (s.providers?.name ?? "Sin nombre"),
         icon: s.providers?.icon ?? null,
         color: TYPE_COLOR[type],
         amount: s.price,
