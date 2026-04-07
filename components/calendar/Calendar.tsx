@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import CalendarNav from "./CalendarNav";
 import CalendarTotal from "./CalendarTotal";
 import CalendarFilter from "./CalendarFilter";
@@ -29,6 +29,20 @@ export default function Calendar() {
   const year = currentDate.getFullYear();
 
   const { subscriptions: rawSubscriptions, loading, refetch, deleteSubscription } = useSubscriptions();
+
+  const [exchangeRate, setExchangeRate] = useState<number>(25);
+  useEffect(() => {
+    const readRate = () => {
+      const stored = localStorage.getItem("exchangeRate_usd_lps");
+      if (stored) {
+        const rate = parseFloat(stored);
+        if (!isNaN(rate) && rate > 0) setExchangeRate(rate);
+      }
+    };
+    readRate();
+    window.addEventListener("exchangeRateUpdated", readRate);
+    return () => window.removeEventListener("exchangeRateUpdated", readRate);
+  }, []);
 
   // Map DB rows to the Subscription shape used by calendar components
   const subscriptions: Subscription[] = useMemo(() =>
@@ -101,7 +115,7 @@ export default function Calendar() {
           />
           <CalendarFilter />
         </div>
-        <CalendarTotal totals={totals} />
+        <CalendarTotal totals={totals} exchangeRate={exchangeRate} />
       </div>
 
       {/* Day headers */}

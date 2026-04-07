@@ -24,6 +24,7 @@ export default function ExchangeRateModal({ onClose }: ExchangeRateModalProps) {
     const parsed = parseFloat(rate.replace(",", "."));
     if (!rate || isNaN(parsed) || parsed <= 0) return;
     localStorage.setItem(EXCHANGE_RATE_KEY, String(parsed));
+    window.dispatchEvent(new Event("exchangeRateUpdated"));
     setSaved(true);
     setTimeout(() => {
       setSaved(false);
