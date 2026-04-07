@@ -137,7 +137,7 @@ export default function AddSubscriptionModal({ onClose, onSuccess }: AddSubscrip
       onClick={onClose}
     >
       <div
-        className="rounded-2xl p-5 w-[300px] sm:w-[360px] shadow-2xl"
+        className="rounded-2xl p-4 sm:p-5 w-[92vw] max-w-[360px] shadow-2xl"
         style={{ backgroundColor: "#1e1410" }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -181,7 +181,7 @@ export default function AddSubscriptionModal({ onClose, onSuccess }: AddSubscrip
             <button
               type="button"
               onClick={() => setDropdownOpen((v) => !v)}
-              className="flex items-center justify-between rounded-xl px-3 py-2 text-sm text-left cursor-pointer transition-colors"
+              className="flex items-center justify-between rounded-xl px-3 py-2.5 sm:py-2 text-sm text-left cursor-pointer transition-colors"
               style={{
                 backgroundColor: "rgba(255,255,255,0.07)",
                 border: "1px solid rgba(255,255,255,0.1)",
@@ -322,7 +322,7 @@ export default function AddSubscriptionModal({ onClose, onSuccess }: AddSubscrip
                       key={c.id}
                       type="button"
                       onClick={() => setSelectedCurrency(c)}
-                      className="flex-1 py-2 text-sm font-semibold transition-colors cursor-pointer"
+                      className="flex-1 py-2.5 sm:py-2 text-sm font-semibold transition-colors cursor-pointer"
                       style={{
                         backgroundColor: selectedCurrency?.id === c.id ? "#f5a623" : "rgba(255,255,255,0.07)",
                         color: selectedCurrency?.id === c.id ? "#1a0f08" : "rgba(255,255,255,0.5)",
@@ -343,7 +343,7 @@ export default function AddSubscriptionModal({ onClose, onSuccess }: AddSubscrip
                 Monto
               </label>
               <div
-                className="flex items-center rounded-xl px-3 py-2 gap-1"
+                className="flex items-center rounded-xl px-3 py-2.5 sm:py-2 gap-1"
                 style={{
                   backgroundColor: "rgba(255,255,255,0.07)",
                   border: "1px solid rgba(255,255,255,0.1)",
@@ -377,7 +377,7 @@ export default function AddSubscriptionModal({ onClose, onSuccess }: AddSubscrip
               type="date"
               value={fecha}
               onChange={(e) => setFecha(e.target.value)}
-              className="rounded-xl px-3 py-2 text-sm text-white outline-none cursor-pointer"
+              className="rounded-xl px-3 py-2.5 sm:py-2 text-sm text-white outline-none cursor-pointer w-full"
               style={{
                 backgroundColor: "rgba(255,255,255,0.07)",
                 border: "1px solid rgba(255,255,255,0.1)",
@@ -403,7 +403,7 @@ export default function AddSubscriptionModal({ onClose, onSuccess }: AddSubscrip
                   key={f}
                   type="button"
                   onClick={() => setFrecuencia(f)}
-                  className="flex-1 py-2 text-xs uppercase tracking-widest font-semibold transition-colors cursor-pointer"
+                  className="flex-1 py-2.5 sm:py-2 text-xs uppercase tracking-widest font-semibold transition-colors cursor-pointer"
                   style={{
                     backgroundColor: frecuencia === f ? "#f5a623" : "rgba(255,255,255,0.07)",
                     color: frecuencia === f ? "#1a0f08" : "rgba(255,255,255,0.5)",
@@ -431,7 +431,7 @@ export default function AddSubscriptionModal({ onClose, onSuccess }: AddSubscrip
               type="button"
               onClick={onClose}
               disabled={submitting}
-              className="flex-1 py-2 rounded-xl text-xs uppercase tracking-widest font-semibold transition-opacity hover:opacity-70 cursor-pointer disabled:opacity-40"
+              className="flex-1 py-3 sm:py-2 rounded-xl text-xs uppercase tracking-widest font-semibold transition-opacity hover:opacity-70 cursor-pointer disabled:opacity-40"
               style={{
                 backgroundColor: "rgba(255,255,255,0.07)",
                 color: "rgba(255,255,255,0.5)",
@@ -442,7 +442,7 @@ export default function AddSubscriptionModal({ onClose, onSuccess }: AddSubscrip
             <button
               type="submit"
               disabled={submitting}
-              className="flex-1 py-2 rounded-xl text-xs uppercase tracking-widest font-semibold transition-opacity hover:opacity-80 cursor-pointer disabled:opacity-60"
+              className="flex-1 py-3 sm:py-2 rounded-xl text-xs uppercase tracking-widest font-semibold transition-opacity hover:opacity-80 cursor-pointer disabled:opacity-60"
               style={{ backgroundColor: "#f5a623", color: "#1a0f08" }}
             >
               {submitting ? "Guardando..." : "Agregar"}

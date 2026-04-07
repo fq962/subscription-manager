@@ -101,8 +101,8 @@ export default function Calendar() {
 
   return (
     <div
-      className="rounded-2xl p-3 sm:p-6 w-full"
-      style={{ backgroundColor: "#1a0f08", maxWidth: 720 }}
+      className="sm:rounded-2xl p-2 sm:p-6 w-full sm:bg-[#1a0f08]"
+      style={{ maxWidth: 720 }}
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-3 sm:mb-4">

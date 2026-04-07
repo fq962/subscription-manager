@@ -38,8 +38,8 @@ export default function CalendarDayCell({
     >
       {/* Day number */}
       <span
-        className="text-[0.6rem] sm:text-sm font-medium leading-none"
-        style={{ color: isToday ? "#221910" : "rgba(255,255,255,0.7)" }}
+        className="text-[0.7rem] sm:text-sm font-semibold leading-none"
+        style={{ color: isToday ? "#221910" : "rgba(255,255,255,0.8)" }}
       >
         {day}
       </span>
@@ -53,16 +53,16 @@ export default function CalendarDayCell({
 
       {/* Dot indicators — always visible */}
       {subscriptions.length > 0 && (
-        <div className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2 flex gap-0.5 sm:gap-1">
+        <div className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2 flex gap-0.5 sm:gap-1 flex-wrap justify-end max-w-full">
           {subscriptions.map((sub) => (
             <span
               key={sub.id}
               className="rounded-full"
               style={{
-                width: 6,
-                height: 6,
+                width: 7,
+                height: 7,
                 backgroundColor: isToday ? "rgba(34,25,16,0.6)" : sub.color,
-                boxShadow: isToday ? "none" : `0 0 4px ${sub.color}`,
+                boxShadow: isToday ? "none" : `0 0 5px ${sub.color}`,
                 display: "inline-block",
                 flexShrink: 0,
               }}

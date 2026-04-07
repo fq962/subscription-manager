@@ -5,7 +5,7 @@ const FILTERS: { label: string; color: string }[] = [
 
 export default function CalendarFilter() {
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-3 sm:gap-4">
       {FILTERS.map(({ label, color }) => (
         <LegendChip key={label} label={label} color={color} />
       ))}
@@ -22,15 +22,15 @@ export function LegendChip({ label, color }: LegendChipProps) {
   return (
     <div className="flex items-center gap-1.5">
       <span
-        className="rounded-full"
+        className="rounded-full flex-shrink-0"
         style={{
-          width: 9,
-          height: 9,
+          width: 8,
+          height: 8,
           backgroundColor: color,
           display: "inline-block",
         }}
       />
-      <span className="text-white text-sm">{label}</span>
+      <span className="text-white text-xs sm:text-sm">{label}</span>
     </div>
   );
 }

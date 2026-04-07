@@ -37,13 +37,13 @@ export default function CalendarTotal({
   return (
     <div className="text-right">
       <p
-        className="uppercase font-semibold text-[0.55rem] sm:text-[0.7rem] mb-0.5"
+        className="uppercase font-semibold text-[0.6rem] sm:text-[0.7rem] mb-0.5"
         style={{ color: "#f5a623", letterSpacing: "0.2em" }}
       >
         {label}
       </p>
       <p
-        className="font-semibold leading-none text-base sm:text-xl"
+        className="font-semibold leading-none text-lg sm:text-xl"
         style={{ color: "rgba(255,255,255,0.85)" }}
       >
         {display}

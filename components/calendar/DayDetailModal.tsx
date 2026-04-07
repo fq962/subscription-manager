@@ -99,12 +99,13 @@ function SubscriptionRow({
             onClick={handleDelete}
             disabled={deleting}
             title={confirm ? "¿Confirmar?" : "Eliminar"}
-            className="flex items-center justify-center rounded-lg transition-all"
+            className={`flex items-center justify-center rounded-lg transition-all ${
+              hovered ? "opacity-100" : "opacity-[0.35] [@media(hover:hover)]:opacity-0"
+            }`}
             style={{
-              width: 28,
-              height: 28,
-              opacity: hovered ? 1 : 0,
-              pointerEvents: hovered ? "auto" : "none",
+              width: 32,
+              height: 32,
+              pointerEvents: "auto",
               backgroundColor: confirm ? "rgba(239,68,68,0.2)" : "rgba(255,255,255,0.06)",
               color: confirm ? "#f87171" : "rgba(255,255,255,0.4)",
               transition: "opacity 0.15s, background-color 0.15s, color 0.15s",
@@ -173,7 +174,7 @@ export default function DayDetailModal({
       onClick={onClose}
     >
       <div
-        className="rounded-2xl p-5 w-[280px] sm:w-[320px] shadow-2xl animate-popIn"
+        className="rounded-2xl p-4 sm:p-5 w-[92vw] max-w-[340px] shadow-2xl animate-popIn"
         style={{ backgroundColor: "#1e1410" }}
         onClick={(e) => e.stopPropagation()}
       >

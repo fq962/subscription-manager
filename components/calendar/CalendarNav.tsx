@@ -14,9 +14,9 @@ export default function CalendarNav({
   onNext,
 }: CalendarNavProps) {
   return (
-    <div className="flex items-center gap-2 sm:gap-4">
+    <div className="flex items-center gap-1 sm:gap-4">
       <NavArrow direction="left" onClick={onPrev} />
-      <h1 className="text-white font-bold tracking-widest uppercase text-lg sm:text-2xl">
+      <h1 className="text-white font-bold tracking-widest uppercase text-xl sm:text-2xl">
         {month}, {year}
       </h1>
       <NavArrow direction="right" onClick={onNext} />
@@ -33,11 +33,11 @@ export function NavArrow({ direction, onClick }: NavArrowProps) {
   return (
     <button
       onClick={onClick}
-      className="text-white opacity-70 hover:opacity-100 transition-opacity cursor-pointer"
+      className="text-white opacity-70 hover:opacity-100 active:opacity-100 transition-opacity cursor-pointer p-2 -m-2"
       aria-label={direction === "left" ? "Mes anterior" : "Mes siguiente"}
     >
       {direction === "left" ? (
-        <svg width="10" height="16" viewBox="0 0 10 16" fill="none">
+        <svg width="12" height="18" viewBox="0 0 10 16" fill="none">
           <path
             d="M8.5 1.5L1.5 8L8.5 14.5"
             stroke="white"
@@ -47,7 +47,7 @@ export function NavArrow({ direction, onClick }: NavArrowProps) {
           />
         </svg>
       ) : (
-        <svg width="10" height="16" viewBox="0 0 10 16" fill="none">
+        <svg width="12" height="18" viewBox="0 0 10 16" fill="none">
           <path
             d="M1.5 1.5L8.5 8L1.5 14.5"
             stroke="white"
