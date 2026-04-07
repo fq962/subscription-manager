@@ -58,6 +58,7 @@ export interface Database {
           billing_day: number;
           is_active: boolean | null;
           created_at: string | null;
+          other_provider_name: string | null;
         };
         Insert: {
           user_id: string;
@@ -68,6 +69,7 @@ export interface Database {
           billing_day: number;
           is_active?: boolean | null;
           created_at?: string | null;
+          other_provider_name?: string | null;
         };
         Update: {
           provider_id?: number;
@@ -76,6 +78,7 @@ export interface Database {
           type?: string;
           billing_day?: number;
           is_active?: boolean | null;
+          other_provider_name?: string | null;
         };
         Relationships: [
           {
