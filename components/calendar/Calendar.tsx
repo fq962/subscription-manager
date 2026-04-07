@@ -28,7 +28,7 @@ export default function Calendar() {
   const month = currentDate.getMonth();
   const year = currentDate.getFullYear();
 
-  const { subscriptions: rawSubscriptions, loading, refetch, deleteSubscription } = useSubscriptions();
+  const { subscriptions: rawSubscriptions, loading, refetch, deleteSubscription, updateSubscriptionPrice } = useSubscriptions();
 
   const [exchangeRate, setExchangeRate] = useState<number>(25);
   useEffect(() => {
@@ -176,6 +176,9 @@ export default function Calendar() {
           onClose={() => setSelectedDay(null)}
           onDelete={async (id) => {
             await deleteSubscription(id);
+          }}
+          onUpdate={async (id, price) => {
+            await updateSubscriptionPrice(id, price);
           }}
         />
       )}

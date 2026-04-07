@@ -70,5 +70,15 @@ export function useSubscriptions() {
     return { error };
   }, [fetchSubscriptions]);
 
-  return { subscriptions, loading, error, refetch: fetchSubscriptions, deleteSubscription };
+  const updateSubscriptionPrice = useCallback(async (id: number, price: number) => {
+    const { error } = await supabase
+      .from("subscriptions")
+      .update({ price })
+      .eq("id", id);
+
+    if (!error) await fetchSubscriptions();
+    return { error };
+  }, [fetchSubscriptions]);
+
+  return { subscriptions, loading, error, refetch: fetchSubscriptions, deleteSubscription, updateSubscriptionPrice };
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Subscription } from "./types";
 
 interface DayDetailModalProps {
@@ -9,6 +9,7 @@ interface DayDetailModalProps {
   subscriptions: Subscription[];
   onClose: () => void;
   onDelete?: (id: number) => Promise<void>;
+  onUpdate?: (id: number, price: number) => Promise<void>;
 }
 
 function ProviderIcon({ icon, name, color }: { icon: string | null; name: string; color: string }) {
@@ -42,13 +43,19 @@ function TrashIcon() {
 function SubscriptionRow({
   sub,
   onDelete,
+  onUpdate,
 }: {
   sub: Subscription;
   onDelete?: (id: number) => Promise<void>;
+  onUpdate?: (id: number, price: number) => Promise<void>;
 }) {
   const [hovered, setHovered] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [confirm, setConfirm] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [editValue, setEditValue] = useState(sub.amount.toFixed(2));
+  const [saving, setSaving] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleDelete = async () => {
     if (!onDelete) return;
@@ -57,10 +64,40 @@ function SubscriptionRow({
     await onDelete(sub.id);
   };
 
-  // reset confirm if mouse leaves the row
   const handleMouseLeave = () => {
     setHovered(false);
     setConfirm(false);
+  };
+
+  const startEditing = () => {
+    setEditValue(sub.amount.toFixed(2));
+    setEditing(true);
+    setTimeout(() => {
+      inputRef.current?.focus();
+      inputRef.current?.select();
+    }, 0);
+  };
+
+  const cancelEditing = () => {
+    setEditing(false);
+    setEditValue(sub.amount.toFixed(2));
+  };
+
+  const commitEdit = async () => {
+    const parsed = parseFloat(editValue.replace(",", "."));
+    if (isNaN(parsed) || parsed <= 0 || parsed === sub.amount) {
+      cancelEditing();
+      return;
+    }
+    setSaving(true);
+    await onUpdate?.(sub.id, parsed);
+    setSaving(false);
+    setEditing(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") commitEdit();
+    if (e.key === "Escape") cancelEditing();
   };
 
   return (
@@ -87,17 +124,46 @@ function SubscriptionRow({
         </div>
       </div>
 
-      {/* Right side: amount + trash */}
+      {/* Right side: amount editable + trash */}
       <div className="flex items-center gap-2">
-        <p className="text-white text-sm font-semibold">
-          {sub.currencySymbol}{sub.amount.toFixed(2)}
-        </p>
+        {editing ? (
+          <div className="flex items-center gap-1">
+            <span className="text-sm font-semibold" style={{ color: "rgba(255,255,255,0.5)" }}>
+              {sub.currencySymbol}
+            </span>
+            <input
+              ref={inputRef}
+              type="number"
+              min="0"
+              step="0.01"
+              value={editValue}
+              onChange={(e) => setEditValue(e.target.value)}
+              onKeyDown={handleKeyDown}
+              onBlur={commitEdit}
+              disabled={saving}
+              className="text-sm font-semibold text-white bg-transparent outline-none text-right w-20"
+              style={{
+                borderBottom: "1px solid rgba(245,166,35,0.6)",
+                paddingBottom: 1,
+              }}
+            />
+            {saving && <span style={{ fontSize: 10, color: "rgba(255,255,255,0.4)" }}>...</span>}
+          </div>
+        ) : (
+          <button
+            onClick={startEditing}
+            title="Editar monto"
+            className="text-white text-sm font-semibold transition-opacity hover:opacity-70 cursor-pointer"
+          >
+            {sub.currencySymbol}{sub.amount.toFixed(2)}
+          </button>
+        )}
 
-        {/* Trash button — visible on hover */}
+        {/* Trash button */}
         {onDelete && (
           <button
             onClick={handleDelete}
-            disabled={deleting}
+            disabled={deleting || editing}
             title={confirm ? "¿Confirmar?" : "Eliminar"}
             className={`flex items-center justify-center rounded-lg transition-all ${
               hovered ? "opacity-100" : "opacity-[0.35] [@media(hover:hover)]:opacity-0"
@@ -105,7 +171,7 @@ function SubscriptionRow({
             style={{
               width: 32,
               height: 32,
-              pointerEvents: "auto",
+              pointerEvents: editing ? "none" : "auto",
               backgroundColor: confirm ? "rgba(239,68,68,0.2)" : "rgba(255,255,255,0.06)",
               color: confirm ? "#f87171" : "rgba(255,255,255,0.4)",
               transition: "opacity 0.15s, background-color 0.15s, color 0.15s",
@@ -143,6 +209,7 @@ export default function DayDetailModal({
   subscriptions,
   onClose,
   onDelete,
+  onUpdate,
 }: DayDetailModalProps) {
   // Group totals by currency symbol
   const totals = subscriptions.reduce<Record<string, number>>((acc, s) => {
@@ -186,7 +253,7 @@ export default function DayDetailModal({
         {/* Subscription rows */}
         <div className="flex flex-col gap-1">
           {subscriptions.map((sub) => (
-            <SubscriptionRow key={sub.id} sub={sub} onDelete={onDelete} />
+            <SubscriptionRow key={sub.id} sub={sub} onDelete={onDelete} onUpdate={onUpdate} />
           ))}
         </div>
 
